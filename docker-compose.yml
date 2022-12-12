@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  docker-simple-app:
+    depends_on:
+      - postgres
+    build:
+      context: .
+    restart: on-failure
+    container_name: rest-server
+    environment:
+      - APP_DB_PORT=${APP_DB_PORT:-5432}
+      - APP_DB_NAME=${APP_DB_NAME:-user}
+      - APP_DB_PASSWORD=${APP_DB_PASSWORD:-qwerty}
+      - APP_DB_USERNAME=${APP_DB_USERNAME:-postgres}
+    networks:
+      - myNet
+    ports:
+      - "8080:1323"
+
+  postgres:
+    container_name: postgresql
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=${APP_DB_NAME:-user}
+      - POSTGRES_PASSWORD=${APP_DB_PASSWORD:-qwerty}
+      - POSTGRES_USER=${APP_DB_USERNAME:-postgres}
+    ports:
+      - ${APP_DB_PORT}:${APP_DB_PORT}
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+    networks:
+      - myNet
+
+volumes:
+  postgres:
+    name: pg-data
+
+networks:
+  myNet:
+    driver: bridge

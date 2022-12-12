@@ -8,7 +8,7 @@ import (
 )
 
 type DbConfig struct {
-	Port         int    `env:"APP_DB_PORT" envDefault:"8080"`
+	Port         int    `env:"APP_DB_PORT" envDefault:"5433"`
 	DBName       string `env:"APP_DB_NAME" envDefault:"postgres"`
 	Password     string `env:"APP_DB_PASSWORD"`
 	Username     string `env:"APP_DB_USERNAME" envDefault:"postgres"`
@@ -17,10 +17,15 @@ type DbConfig struct {
 }
 
 func (cfg *DbConfig) Init(ctx context.Context) error {
-	connStr := fmt.Sprintf("host=localhost user=%s password=%s  dbname=%s port=%d sslmode=disable",
+	connStr := fmt.Sprintf("host=postgres user=%s password=%s dbname=%s port=%d sslmode=disable",
 		cfg.Username, cfg.Password, cfg.DBName, cfg.Port)
 
-	conn, err := pgxpool.Connect(ctx, connStr)
+	config, err := pgxpool.ParseConfig(connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Info(config.ConnConfig.ConnString())
+	conn, err := pgxpool.ConnectConfig(ctx, config)
 	if err != nil {
 		log.Fatalf("Store config: Can't connect to database: %s", err)
 	}
