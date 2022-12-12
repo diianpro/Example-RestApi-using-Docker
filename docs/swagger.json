@@ -1,0 +1,173 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server RestAPI server.",
+        "title": "Swagger RestAPI",
+        "contact": {},
+        "version": "2.0"
+    },
+    "host": "localhost:1323",
+    "basePath": "/",
+    "paths": {
+        "/note": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Create note based on given ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Title",
+                        "name": "title",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TodoList"
+                        }
+                    }
+                }
+            }
+        },
+        "/note/:id": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Retrieves note based on given ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Note ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TodoList"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "UpdateNote note based on given ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Title",
+                        "name": "title",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TodoList"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Delete note based on given ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Note ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TodoList"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "GetAll note",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TodoList"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.TodoList": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
