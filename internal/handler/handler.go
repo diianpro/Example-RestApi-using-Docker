@@ -23,20 +23,19 @@ type NoteHandler struct {
 //@Success 200  {object} models.TodoList
 //@Router /note [post]
 func (h *NoteHandler) CreateNote(c echo.Context) error {
-	var request models.TodoList
-	req := request
-	if err := c.Bind(&req); err != nil {
+	var input models.TodoList
+	if err := c.Bind(&input); err != nil {
 		log.Errorf("Create: Bind error: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err := h.noteHandler.Create(c.Request().Context(), &req)
+	err := h.noteHandler.Create(c.Request().Context(), &input)
 	if err != nil {
 		log.Errorf("Create: Note error: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, req.ID)
+	return c.JSON(http.StatusOK, input.ID)
 }
 
 //DeleteNote godoc
