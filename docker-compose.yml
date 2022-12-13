@@ -18,6 +18,18 @@ services:
     ports:
       - "8080:1323"
 
+  track-flyway:
+    image: flyway/flyway:9-alpine
+    restart: on-failure
+    command: -url=jdbc:postgresql://postgres:5432/${APP_DB_NAME} -schemas=public -user=${APP_DB_USERNAME} -password=${APP_DB_PASSWORD} migrate
+    volumes:
+      - .:/flyway/sql
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      myNet:
+
   postgres:
     container_name: postgresql
     image: postgres:14-alpine
@@ -30,6 +42,11 @@ services:
       - ${APP_DB_PORT}:${APP_DB_PORT}
     volumes:
       - ./pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-U", "${APP_DB_NAME}" ]
+      interval: 5s
+      timeout: 1s
+      retries: 2
     networks:
       - myNet
 

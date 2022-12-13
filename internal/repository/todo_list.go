@@ -53,7 +53,7 @@ func (t todoList) GetAll(ctx context.Context) ([]models.TodoList, error) {
 	}
 	defer row.Close()
 
-	var result []models.TodoList
+	result := make([]models.TodoList, 0)
 
 	for row.Next() {
 
