@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   docker-simple-app:
-    depends_on:
-      - postgres
     build:
       context: .
+    ports:
+      - "8080:1323"
     restart: on-failure
     container_name: rest-server
     environment:
@@ -15,8 +15,9 @@ services:
       - APP_DB_USERNAME=${APP_DB_USERNAME:-postgres}
     networks:
       - myNet
-    ports:
-      - "8080:1323"
+    depends_on:
+      - postgres
+
 
   track-flyway:
     image: flyway/flyway:9-alpine
